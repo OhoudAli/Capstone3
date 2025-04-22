@@ -4,6 +4,7 @@ package com.example.capstone3.Model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,6 +23,7 @@ public class Property {
 
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
 
@@ -53,6 +55,7 @@ public class Property {
 
     @Column
     @NotEmpty
+    @Pattern(regexp = "Active|Inactive")
     private String status;
 
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "property")

@@ -5,48 +5,36 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.Set;
 
 @Entity
 @Setter
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Investor {
+public class Admin {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotEmpty(message = "name cant be empty")
-    @Size(min = 5,message = "the name length should be 5 letters at lest ")
+    @Column
+    @NotEmpty
     private String name;
 
-
-    @Email
-    private String email;
-
-    @NotEmpty(message = "password cant be empty")
     @Column
+    @NotEmpty
     @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$", message = "password must contain letters ,digits and special character")
     private String password;
 
-    @NotEmpty(message = "phone number is required")
-    private String phone_number;
 
-
-//    @OneToOne
-//    private Contract contract;
-
-
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "investor")
-    private Set<Offer> offer;
+    @Column
+    @NotEmpty
+    @Email
+    private String email;
 
 
 

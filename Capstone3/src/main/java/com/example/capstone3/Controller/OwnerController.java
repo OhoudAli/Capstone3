@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/owner")
@@ -16,9 +18,9 @@ public class OwnerController {
 
     private final OwnerService ownerService;
 
-    @GetMapping
+    @GetMapping("/getAll")
     public List<Owner> getAll() {
-        return ownerService.getAll();
+        return ownerService.getAllOwners();
     }
 
     @GetMapping("/get-by-id/{id}")
