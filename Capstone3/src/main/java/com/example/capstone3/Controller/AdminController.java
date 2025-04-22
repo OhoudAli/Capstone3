@@ -36,4 +36,6 @@ public class AdminController {
         return ResponseEntity.status(200).body(new ApiResponse("Admin updated successfully"));
 
     }
+
+
 }

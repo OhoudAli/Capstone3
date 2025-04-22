@@ -41,9 +41,9 @@ public class OwnerService {
     }
 
     public void deleteOwner(Integer id) {
-        Owner owner = ownerRepository.findById(id).orElse(null);
+        Owner owner = ownerRepository.findOwnerById(id);
         if (owner == null) {
-            return new ApiResponse("Owner not found", 404);
+             new ApiResponse("Owner not found");
         }
         ownerRepository.delete(owner);
     }
