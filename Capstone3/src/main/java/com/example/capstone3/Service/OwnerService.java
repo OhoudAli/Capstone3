@@ -36,7 +36,11 @@ public class OwnerService {
         if(oldOwner == null){
             throw new ApiException("Owner not found");
         }
-      //
+        oldOwner.setName(owner.getName());
+        oldOwner.setEmail(owner.getEmail());
+        oldOwner.setPassword(owner.getPassword());
+        oldOwner.setPhone_number(owner.getPhone_number());
+
         ownerRepository.save(owner);
     }
 

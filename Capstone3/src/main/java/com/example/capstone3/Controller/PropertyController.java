@@ -21,9 +21,9 @@ public class PropertyController {
         return ResponseEntity.status(200).body(propertyService.getAllProperties());
     }
 
-    @PostMapping("/add")
-    public ResponseEntity addProperty(@Valid @RequestBody Property property){
-        propertyService.addProperty(property);
+    @PostMapping("/add/{ownerId}")
+    public ResponseEntity addProperty(@PathVariable Integer ownerId,@Valid @RequestBody Property property){
+        propertyService.addPropertyByOwner(ownerId, property);
         return ResponseEntity.status(200).body(new ApiResponse("Property added successfully"));
     }
 
@@ -42,5 +42,16 @@ public class PropertyController {
     }
 
 
-
+//    @PutMapping("/activeProperty/{propertyId}/{adminId}")
+//    public ResponseEntity activeTheProperty(@PathVariable Integer propertyId, @PathVariable Integer adminId){
+//        propertyService.activeTheProperty(propertyId, adminId);
+//        return ResponseEntity.status(200).body(new ApiResponse("Property is now active and visible to investors"));
+//    }
+//
+//    @PutMapping("/rejectProperty/{propertyId}/{adminId}")
+//    public ResponseEntity rejectTheProperty(@PathVariable Integer propertyId, @PathVariable Integer adminId) {
+//        propertyService.rejectTheProperty(propertyId, adminId);
+//        return ResponseEntity.status(200).body(new ApiResponse("Property is now active and visible to investorsProperty has been rejected and hidden from investors"));
+//
+//    }
 }

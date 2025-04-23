@@ -3,10 +3,14 @@ package com.example.capstone3.Advise;
 import com.example.capstone3.Api.ApiException;
 import com.example.capstone3.Api.ApiResponse;
 import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.UnexpectedTypeException;
+import org.hibernate.TransientObjectException;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.dao.InvalidDataAccessResourceUsageException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -93,6 +97,33 @@ public class ControllerAdvise {
     @ExceptionHandler(value = NullPointerException.class)
     public ResponseEntity<ApiResponse> NullPointerException(NullPointerException e) {
         String msg = e.getMessage();
+        return ResponseEntity.status(400).body(new ApiResponse(msg));
+    }
+
+    //Ohoud
+    @ExceptionHandler(value = UnexpectedTypeException.class)
+    public ResponseEntity<ApiResponse> UnexpectedTypeException(UnexpectedTypeException e){
+        String msg = e.getMessage();
+        return ResponseEntity.status(400).body(new ApiResponse(msg));
+
+    }
+    //Ohoud
+    @ExceptionHandler(value = JpaSystemException.class)
+    public ResponseEntity<ApiResponse> JpaSystemException(JpaSystemException e){
+        String msg = e.getMessage();
+        return ResponseEntity.status(400).body(new ApiResponse(msg));
+    }
+
+    //Ohoud
+    @ExceptionHandler(value = InvalidDataAccessApiUsageException.class)
+    public ResponseEntity<ApiResponse> InvalidDataAccessApiUsageException(InvalidDataAccessApiUsageException e){
+        String msg = e.getMessage();
+        return ResponseEntity.status(400).body(new ApiResponse(msg));
+    }
+
+    @ExceptionHandler(value = TransientObjectException.class)
+    public ResponseEntity<ApiResponse> TransientObjectException(TransientObjectException e){
+        String msg = e.getMessage();;
         return ResponseEntity.status(400).body(new ApiResponse(msg));
     }
 }

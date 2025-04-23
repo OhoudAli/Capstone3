@@ -4,6 +4,7 @@ package com.example.capstone3.Model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -28,35 +29,35 @@ public class Property {
 
 
     @Column
-    @NotEmpty
+    @NotEmpty(message = "title should not be empty")
     private String title;
 
 
-    @NotEmpty
+    @NotEmpty(message = "description should not be empty")
     @Column
     private String description;
 
     @Column
-    @NotEmpty
+    @NotEmpty(message = "type should not be empty")
     private String type;
 
-    @NotEmpty
+    @NotEmpty(message = "location should not be empty")
     @Column
     private String location;
 
 
-    @NotEmpty
+    @NotNull(message = "area size should not be empty")
     @Column
     private Double areaSize;
 
-    @NotEmpty
+
     @Column
-    private LocalDate CreateAt;
+    private String status;
 
     @Column
     @NotEmpty
-    @Pattern(regexp = "Active|Inactive")
-    private String status;
+    @Pattern(regexp = "^S\\d{10}$")
+    private String serialNumber;
 
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "property")
     private Set<Offer> offer;
@@ -66,10 +67,6 @@ public class Property {
     @JoinColumn
     private Owner owner;
 
-    @ManyToOne
-    @JsonIgnore
-    @JoinColumn
-    private MunicioalRequirment municioalrequirment;
 
 
 }

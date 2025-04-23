@@ -25,11 +25,12 @@ public class Investor {
     private Integer id;
 
     @NotEmpty(message = "name cant be empty")
-    @Size(min = 5,message = "the name length should be 5 letters at lest ")
+    @Size(min = 3,message = "the name length should be 5 letters at lest ")
     private String name;
 
 
     @Email
+    @Column
     private String email;
 
     @NotEmpty(message = "password cant be empty")
@@ -37,6 +38,7 @@ public class Investor {
     @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$", message = "password must contain letters ,digits and special character")
     private String password;
 
+    @Column
     @NotEmpty(message = "phone number is required")
     private String phone_number;
 

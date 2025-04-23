@@ -21,17 +21,12 @@ public class OfferController {
         return ResponseEntity.status(200).body(offerService.getAllOffers());
     }
 
-    @PostMapping("/add")
-    public ResponseEntity addOffer(@Valid @RequestBody Offer offer) {
-        offerService.addOffer(offer);
-        return ResponseEntity.status(200).body(new ApiResponse("Offer added successfully"));
+    @PostMapping("/addOfferByInvestor/{investorId}/{propertyId}")
+    public ResponseEntity addOffer(@PathVariable Integer investorId,@PathVariable Integer propertyId,@Valid @RequestBody Offer offer) {
+        offerService.addOfferByInvestor(investorId,propertyId, offer);
+        return ResponseEntity.status(200).body(new ApiResponse("Offer posted successfully"));
     }
 
-    @PutMapping("/update/{id}")
-    public ResponseEntity updateOffer(@PathVariable Integer id, @Valid @RequestBody Offer offer) {
-        offerService.updateOffer(offer, id);
-        return ResponseEntity.status(200).body(new ApiResponse("Offer updated successfully"));
-    }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity deleteOffer(@PathVariable Integer id) {
@@ -39,15 +34,6 @@ public class OfferController {
         return ResponseEntity.status(200).body(new ApiResponse("Offer deleted successfully"));
     }
 
-    @PutMapping("/assign-investor/{offerId}/to/{investorId}")
-    public ResponseEntity assignInvestorToOffer(@PathVariable Integer offerId, @PathVariable Integer investorId) {
-        offerService.assignInvestorToOffer(offerId, investorId);
-        return ResponseEntity.status(200).body(new ApiResponse("Investor assigned to offer successfully"));
-    }
 
-    @PutMapping("/assign-property/{offerId}/to/{propertyId}")
-    public ResponseEntity assignPropertyToOffer(@PathVariable Integer offerId, @PathVariable Integer propertyId) {
-        offerService.assignPropertyToOffer(offerId, propertyId);
-        return ResponseEntity.status(200).body(new ApiResponse("Property assigned to offer successfully"));
-    }
+
 }
