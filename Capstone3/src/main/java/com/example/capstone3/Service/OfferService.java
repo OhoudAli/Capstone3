@@ -35,8 +35,11 @@ public class OfferService {
         if (investor == null) {
             throw new ApiException("Investor not found");
         }
-        if (property == null) {
+        if (property == null ) {
             throw new ApiException("Property not found");
+        }
+        if(!property.getStatus().equals("Active")){
+            throw new ApiException("Property not active yet");
         }
          offer.setInvestor(investor);
         offer.setProperty(property);
