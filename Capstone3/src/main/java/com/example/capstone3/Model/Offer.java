@@ -21,6 +21,7 @@ import java.time.LocalDate;
 public class Offer {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
 

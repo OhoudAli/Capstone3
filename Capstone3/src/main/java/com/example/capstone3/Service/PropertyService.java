@@ -2,10 +2,8 @@ package com.example.capstone3.Service;
 
 
 import com.example.capstone3.Api.ApiException;
-import com.example.capstone3.Model.MunicioalRequirment;
 import com.example.capstone3.Model.Owner;
 import com.example.capstone3.Model.Property;
-import com.example.capstone3.Repository.MunicioalRequirmentRepository;
 import com.example.capstone3.Repository.OwnerRepository;
 import com.example.capstone3.Repository.PropertyRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +18,6 @@ public class PropertyService {
 
     private final PropertyRepository propertyRepository;
     private final OwnerRepository ownerRepository;
-    private final MunicioalRequirmentRepository municioalRequirmentRepository;
 
 
     public List<Property> getAllProperties(){

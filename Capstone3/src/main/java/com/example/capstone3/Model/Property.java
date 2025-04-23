@@ -58,6 +58,8 @@ public class Property {
     @Pattern(regexp = "Active|Inactive")
     private String status;
 
+
+
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "property")
     private Set<Offer> offer;
 
@@ -66,10 +68,6 @@ public class Property {
     @JoinColumn
     private Owner owner;
 
-    @ManyToOne
-    @JsonIgnore
-    @JoinColumn
-    private MunicioalRequirment municioalrequirment;
 
 
 }

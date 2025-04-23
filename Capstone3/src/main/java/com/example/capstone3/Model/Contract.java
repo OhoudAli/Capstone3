@@ -24,13 +24,7 @@ public class Contract {
     private Integer id;
 
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    private Owner owner;
 
-
-    @OneToOne
-    @PrimaryKeyJoinColumn
-    private Offer offer;
 
     @NotEmpty(message = "Cannot be Empty")
     private String ContractDocumentationPath;
@@ -50,6 +44,15 @@ public class Contract {
     private LocalDate paymentDate;
 
     private LocalDateTime ContractDate;
+
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    private Owner owner;
+
+
+    @OneToOne
+    @PrimaryKeyJoinColumn
+    private Offer offer;
 //    @Column
 //    private Integer agreeCost;
 //
