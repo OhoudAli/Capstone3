@@ -2,12 +2,16 @@ package com.example.capstone3.Controller;
 
 
 import com.example.capstone3.Api.ApiResponse;
+import com.example.capstone3.DTO.BestOffersDTO;
 import com.example.capstone3.Model.Offer;
 import com.example.capstone3.Service.OfferService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Collections;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @RestController
@@ -32,6 +36,39 @@ public class OfferController {
     public ResponseEntity deleteOffer(@PathVariable Integer id) {
         offerService.deleteOffer(id);
         return ResponseEntity.status(200).body(new ApiResponse("Offer deleted successfully"));
+    }
+
+    //--------------------------------------------------
+    //Taha
+    // Get the offer with the highest cost
+    @GetMapping("/highest-cost")
+    public Offer getHighestCostOffer() {
+        return offerService.getHighestCostOffer();
+    }
+
+    // Get the offer with the least years
+    @GetMapping("/least-years")
+    public Offer getOfferWithLeastYears() {
+        return offerService.getOfferWithLeastYears();
+    }
+
+    // ---
+    @GetMapping("/compare-best-offers")
+    public ResponseEntity<BestOffersDTO> compareBestOffers() {
+        BestOffersDTO result = offerService.getBestOffersComparison();
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/property/{propertyId}/offer-count")
+    public ResponseEntity<?> getOffersCountForProperty(@PathVariable Integer propertyId) {
+        Integer count = offerService.getOffersCountForProperty(propertyId);
+        return ResponseEntity.ok(Collections.singletonMap("offersCount", count));
+    }
+
+    //Taha
+    @GetMapping("/location-count")
+    public Map<String, Integer> getOffersCountPerLocation() {
+        return offerService.getOffersCountPerLocation();
     }
 
 

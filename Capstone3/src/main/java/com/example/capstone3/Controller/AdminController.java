@@ -53,9 +53,9 @@ public class AdminController {
 
     }
 
-    @GetMapping("/get-property")
-    public ResponseEntity getProperty(){
-        return ResponseEntity.status(200).body(propertyService.getAllPropertyByAdmin());
+    @GetMapping("/get-property{adminId}")
+    public ResponseEntity getProperty(@PathVariable Integer adminId){
+        return ResponseEntity.status(200).body(propertyService.getAllPropertyByAdmin(adminId));
     }
 
 }

@@ -34,6 +34,9 @@ public class Contract {
     @PrimaryKeyJoinColumn
     private Offer offer;
 
+    @ManyToOne(cascade = CascadeType.ALL)
+    private Investor investor;
+
     @Column(nullable = false)
     @NotEmpty(message = "Contract documentation path cannot be empty")
     private String ContractDocumentationPath;
@@ -41,7 +44,7 @@ public class Contract {
     @Column(nullable = false)
     @NotNull(message = "Agreed cost cannot be null")
     @Positive(message = "Agreed cost must be positive")
-    private Integer agreeCost;
+    private Double agreeCost;
 
     @Column(nullable = false)
     @NotNull(message = "Using years cannot be null")

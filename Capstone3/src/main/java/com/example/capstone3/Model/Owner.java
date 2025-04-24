@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -33,13 +34,13 @@ public class Owner {
     private String email;
 
     @NotEmpty(message="password cant be empty")
-    @Size(min=8, message = "password length cant be less than 8 letters")
     @Column
+    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$", message = "password must contain letters ,digits and special character")
     private String password;
 
     @NotEmpty(message="phone number can't be empty")
-    @Size(min=9)
     @Column
+    @Pattern(regexp = "^05\\d{8}$", message = "Phone number must start with 0 and be exactly 10 digits")
     private String phone_number;
 
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "owner")

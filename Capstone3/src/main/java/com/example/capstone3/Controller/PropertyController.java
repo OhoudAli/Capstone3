@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RequestMapping("/api/v1/property")
 @RestController
 @RequiredArgsConstructor
@@ -41,17 +43,23 @@ public class PropertyController {
         return ResponseEntity.status(200).body(new ApiResponse("Property deleted successfully"));
     }
 
+    //Taha
+    @GetMapping("/title/{location}")
+    public ResponseEntity getPropertyByTitle(@PathVariable String location) {
+        return ResponseEntity.status(200).body(propertyService.getPropertyByLocation(location));
+    }
 
-//    @PutMapping("/activeProperty/{propertyId}/{adminId}")
-//    public ResponseEntity activeTheProperty(@PathVariable Integer propertyId, @PathVariable Integer adminId){
-//        propertyService.activeTheProperty(propertyId, adminId);
-//        return ResponseEntity.status(200).body(new ApiResponse("Property is now active and visible to investors"));
-//    }
-//
-//    @PutMapping("/rejectProperty/{propertyId}/{adminId}")
-//    public ResponseEntity rejectTheProperty(@PathVariable Integer propertyId, @PathVariable Integer adminId) {
-//        propertyService.rejectTheProperty(propertyId, adminId);
-//        return ResponseEntity.status(200).body(new ApiResponse("Property is now active and visible to investorsProperty has been rejected and hidden from investors"));
-//
-//    }
+    //Taha
+    // Endpoint to get properties with no offers
+    @GetMapping("/no-offers")
+    public List<Property> getPropertiesWithNoOffers() {
+        return propertyService.getPropertiesWithNoOffers();
+    }
+
+
+    @GetMapping("/get-by-status/{ownerId}/{status}")
+    public List<Property> getByStatus(@PathVariable Integer ownerId,@PathVariable String status){
+        return propertyService.getPropertyByStatus(ownerId, status);
+    }
+
 }

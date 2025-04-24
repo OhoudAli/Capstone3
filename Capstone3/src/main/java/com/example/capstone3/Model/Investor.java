@@ -30,7 +30,7 @@ public class Investor {
 
 
     @Email
-    @Column
+    @Column(unique = true)
     private String email;
 
     @NotEmpty(message = "password cant be empty")
@@ -40,6 +40,7 @@ public class Investor {
 
     @Column
     @NotEmpty(message = "phone number is required")
+    @Pattern(regexp = "^05\\d{8}$", message = "Phone number must start with 0 and be exactly 10 digits")
     private String phone_number;
 
 
@@ -50,6 +51,8 @@ public class Investor {
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "investor")
     private Set<Offer> offer;
 
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "investor")
+    private Set<Contract> contracts;
 
 
 }

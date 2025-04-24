@@ -16,4 +16,7 @@ public interface PropertyRepository extends JpaRepository<Property,Integer> {
 
     //Ohoud
     List<Property> findPropertyByStatus(String status);
+
+    List<Property> findPropertiesByLocation( String location);
+
 }

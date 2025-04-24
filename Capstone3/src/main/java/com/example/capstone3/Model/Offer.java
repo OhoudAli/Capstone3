@@ -24,13 +24,15 @@ public class Offer {
 
 
     @Column
+    @NotNull
     private Double cost;
 
     @Column
-
+    @NotNull
     private Integer years;
 
     @Column
+    @NotEmpty
     private String additionalTerm;
 
     @Column

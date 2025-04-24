@@ -22,8 +22,9 @@ public class PropertyService {
     private final PropertyRepository propertyRepository;
     private final OwnerRepository ownerRepository;
     private final AdminRepository adminRepository;
+    private final EmailService emailService;
 
-
+// Ohoud 4: if investor want to see the properties "allow to see the active properties only"
     public List<Property> getAllProperties(){
         List<Property> properties = propertyRepository.findAll();
         List<Property> activeProperties = new ArrayList<>();
@@ -36,12 +37,12 @@ public class PropertyService {
         return activeProperties;
     }
 
-    //Ohoud : to find the active or inactive property
-    public List<Property> getPropertyByStatus(String status){
+    //Ohoud 5: owner can search by status to find the active or inactive property
+    public List<Property> getPropertyByStatus(Integer ownerId,String status){
         return propertyRepository.findPropertyByStatus(status);
     }
 
-    //Worked:Ohoud
+    //Ohoud 6: owner can insert property
     public void addPropertyByOwner(Integer ownerId,Property property){
         Owner owner = ownerRepository.findOwnerById(ownerId);
         if(owner == null){
@@ -54,8 +55,8 @@ public class PropertyService {
 
     }
 
-    //Worked:Ohoud
-    public List<Property> getAllPropertyByAdmin(){
+    //Ohoud 7 : this get only for admin to see the  request for activating the properties or not
+    public List<Property> getAllPropertyByAdmin(Integer adminId){
         return propertyRepository.findAll();
     }
 
@@ -70,8 +71,13 @@ public class PropertyService {
         oldProperty.setLocation(property.getLocation());
         oldProperty.setType(property.getType());
         oldProperty.setTitle(property.getTitle());
+        //Ohoud
+        //if updating property the admin should activate again
+        oldProperty.setStatus("pending");
+
 
         propertyRepository.save(oldProperty);
+
     }
 
 
@@ -85,7 +91,7 @@ public class PropertyService {
         propertyRepository.delete(property);
     }
 
-    //Worked: Ohoud
+    //Ohoud 8: only the admin can activate the properties and if it is active the owner well receive an email
     public void activeTheProperty(Integer propertyId,Integer adminId){
         Admin  admin = adminRepository.findAdminById(adminId);
         Property property =propertyRepository.findPropertiesById(propertyId);
@@ -95,15 +101,16 @@ public class PropertyService {
         if(admin == null){
             throw new ApiException("Admin not found");
         }
-//        if(property.getStatus().equals("Inactive")){
-//            throw new ApiException("Property already Inactive");
-//        }
 
         property.setStatus("Active");
         propertyRepository.save(property);
 
+        String messageToOwner = "Your request for property " + property.getTitle() + " has been active.";
+        emailService.sendEmail(property.getOwner().getEmail(), "Property is active now", messageToOwner);
     }
 
+
+    //Ohoud 9: only admin could reject if owner not follow the instructions and receive an email
     public void rejectTheProperty(Integer propertyId,Integer adminId){
         Admin admin = adminRepository.findAdminById(adminId);
         Property property =propertyRepository.findPropertiesById(propertyId);
@@ -113,11 +120,38 @@ public class PropertyService {
         if(admin == null){
             throw new ApiException("Admin not found");
         }
-//           if(property.getStatus().equals("Active")){
-//               throw new ApiException("Property already active");
-//           }
+
         property.setStatus("Inactive");
         propertyRepository.save(property);
+
+        String messageToOwner = "Your request for property " + property.getTitle() + " rejected for failure to follow the instructions.";
+        emailService.sendEmail(property.getOwner().getEmail(), "Property is Inactive now", messageToOwner);
+    }
+
+
+    //Taha.10
+    public List<Property>  getPropertyByLocation(String location) {
+        List<Property>  properties =  propertyRepository.findPropertiesByLocation(location);
+        if (properties.isEmpty()) {
+            throw new ApiException("No properties found in location: " + location);
+        }
+        return properties;
+    }
+
+    //Taha.11
+    // Method to get properties that have no offers
+    //Helps the user to market the property better
+    public List<Property> getPropertiesWithNoOffers() {
+        List<Property> allProperties = propertyRepository.findAll(); // Get all properties
+        List<Property> propertiesWithNoOffers = new ArrayList<>();
+
+        for (Property property : allProperties) {
+            if (property.getOffer().isEmpty()) { // Check if the property has no offers
+                propertiesWithNoOffers.add(property); // Add it to the list if it has no offers
+            }
+        }
+
+        return propertiesWithNoOffers; // Return the filtered list
     }
 
 }

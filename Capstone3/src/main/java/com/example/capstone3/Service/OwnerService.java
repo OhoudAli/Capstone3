@@ -3,7 +3,9 @@ package com.example.capstone3.Service;
 
 import com.example.capstone3.Api.ApiException;
 import com.example.capstone3.Api.ApiResponse;
+import com.example.capstone3.DTO.OwnerOfferCountDTO;
 import com.example.capstone3.Model.Owner;
+import com.example.capstone3.Repository.OfferRepository;
 import com.example.capstone3.Repository.OwnerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,7 @@ import java.util.List;
 public class OwnerService {
 
     private final OwnerRepository ownerRepository;
+    private final OfferRepository offerRepository;
 
     public List<Owner> getAllOwners() {
         return ownerRepository.findAll();
@@ -50,5 +53,13 @@ public class OwnerService {
              new ApiResponse("Owner not found");
         }
         ownerRepository.delete(owner);
+    }
+
+    //Taha.9
+    // Method to get number of offers for each owner
+    //it is help to find how many offer he hase
+    public List<OwnerOfferCountDTO> getNumberOfOffersForOwners() {
+        List<Owner> owners = ownerRepository.findAll(); // Get all owners
+        return owners.stream().map(owner -> new OwnerOfferCountDTO(owner.getId(), owner.getName(), offerRepository.countByOwner(owner).intValue())).toList();
     }
 }

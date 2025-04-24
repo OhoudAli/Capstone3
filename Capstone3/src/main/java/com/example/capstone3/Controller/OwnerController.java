@@ -2,6 +2,7 @@ package com.example.capstone3.Controller;
 
 
 import com.example.capstone3.Api.ApiResponse;
+import com.example.capstone3.DTO.OwnerOfferCountDTO;
 import com.example.capstone3.Model.Owner;
 import com.example.capstone3.Service.OfferService;
 import com.example.capstone3.Service.OwnerService;
@@ -60,4 +61,16 @@ public class OwnerController {
         offerService.rejectOffer(ownerId, offerId);
         return ResponseEntity.status(200).body(new ApiResponse("Offer rejected"));
     }
+
+
+
+    //Taha
+    // Endpoint to get number of offers for each owner
+    @GetMapping("/offers/count")
+    public List<OwnerOfferCountDTO> getOffersCountForOwners() {
+        return ownerService.getNumberOfOffersForOwners();
+
+
+    }
+
 }

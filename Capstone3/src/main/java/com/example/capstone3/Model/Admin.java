@@ -33,7 +33,7 @@ public class Admin {
     private String password;
 
 
-    @Column
+    @Column(unique = true)
     @NotEmpty(message = "email can not be empty")
     @Email(message = "must be valid email")
     private String email;
