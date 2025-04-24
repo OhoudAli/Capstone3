@@ -13,6 +13,7 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingPathVariableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
@@ -124,6 +125,12 @@ public class ControllerAdvise {
     @ExceptionHandler(value = TransientObjectException.class)
     public ResponseEntity<ApiResponse> TransientObjectException(TransientObjectException e){
         String msg = e.getMessage();;
+        return ResponseEntity.status(400).body(new ApiResponse(msg));
+    }
+
+    @ExceptionHandler(value = MissingPathVariableException.class)
+    public ResponseEntity<ApiResponse> MissingPathVariableException(MissingPathVariableException e){
+        String msg = e.getMessage();
         return ResponseEntity.status(400).body(new ApiResponse(msg));
     }
 }

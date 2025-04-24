@@ -62,4 +62,20 @@ public class OwnerService {
         List<Owner> owners = ownerRepository.findAll(); // Get all owners
         return owners.stream().map(owner -> new OwnerOfferCountDTO(owner.getId(), owner.getName(), offerRepository.countByOwner(owner).intValue())).toList();
     }
+
+
+    //----------------------------------------------------------------
+    //Duja
+//    public String calculateOfferAcceptanceRate(int ownerId) {
+//        int totalOffers = offerRepository.countByOwnerId(ownerId);
+//
+//        if (totalOffers == 0) {
+//            return "Owner has no offers.";
+//        }
+//
+//        int acceptedOffers = offerRepository.countByOwnerIdAndOfferStatus(ownerId, "Accepted");
+//        double rate = (double) acceptedOffers / totalOffers * 100;
+//
+//        return "Owner's bid acceptance rate: " + rate + "%";
+//    }
 }

@@ -3,16 +3,21 @@ package com.example.capstone3.Service;
 
 import com.example.capstone3.Api.ApiException;
 import com.example.capstone3.Model.Admin;
+import com.example.capstone3.Model.Offer;
 import com.example.capstone3.Model.Owner;
 import com.example.capstone3.Model.Property;
 import com.example.capstone3.Repository.AdminRepository;
+import com.example.capstone3.Repository.OfferRepository;
 import com.example.capstone3.Repository.OwnerRepository;
 import com.example.capstone3.Repository.PropertyRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +28,7 @@ public class PropertyService {
     private final OwnerRepository ownerRepository;
     private final AdminRepository adminRepository;
     private final EmailService emailService;
+    private final OfferRepository offerRepository;
 
 // Ohoud 4: if investor want to see the properties "allow to see the active properties only"
     public List<Property> getAllProperties(){
@@ -153,5 +159,100 @@ public class PropertyService {
 
         return propertiesWithNoOffers; // Return the filtered list
     }
+
+
+    //3 Duja
+    public String calculateTotalAnnualProfitFromAllProperties(Owner owner) {
+        List<Property> properties = propertyRepository.findByOwner(owner);
+        if (properties.isEmpty()) {
+            throw  new ApiException("There are no properties owned by this owner or the owner is not present");
+        }
+        double totalAnnualProfit = 0;
+
+        for (Property property : properties) {
+            Double annualRent = property.getAnnualRent();
+
+            if (annualRent != null) {
+                totalAnnualProfit += annualRent;
+            }
+        }
+
+        return "Total owner's profit from all properties during the year: " + totalAnnualProfit + "SR";
+    }
+
+
+
+    //4 Duja
+    public boolean stopReceivingOffers(Integer propertyId) {
+        return propertyRepository.findById(propertyId).map(property -> {
+            property.setAcceptingOffers(false);
+            propertyRepository.save(property);
+            return true;
+        }).orElse(false);
+    }
+
+
+    //Duja
+    //Duja
+    public List<Property> endingSoon(int proposedYears) {
+        int proposedDays = proposedYears * 365;
+        LocalDate today = LocalDate.now();
+        LocalDate endDate = today.plusDays(proposedDays);
+        return propertyRepository.findPropertiesByLeaseEndDateBetween(today, endDate);
+    }
+
+    public Property findById(Integer propertyId) {
+        return propertyRepository.findById(propertyId)
+                .orElseThrow(() -> new ApiException("Property not found"));
+    }
+
+    //Duja
+    public double calculatePropertyPrice(Integer propertyId) {
+        Property property = propertyRepository.findById(propertyId)
+                .orElseThrow(() -> new ApiException("Property not found"));
+
+        double pricePerMeter = 1975.0;
+        Double area = property.getAreaSize();
+
+        if (area == null || area <= 0) {
+            throw new ApiException("Invalid area size");
+        }
+        return area * pricePerMeter;
+    }
+
+
+
+    //6 بيحسب  متوسط العروض الي جته Duja
+    public double calculateAverageOfferPrice(Integer propertyId) {
+        Property property = propertyRepository.findById(propertyId)
+                .orElseThrow(() -> new ApiException("Property not found"));
+
+        List<Offer> offers = offerRepository.findByProperty_Id(propertyId);
+
+        if (offers.isEmpty()) {
+            return 0;
+        }
+
+        double totalPrice = 0;
+        int validOffersCount = 0;
+
+        for (Offer offer : offers) {
+            Double cost = Double.valueOf(offer.getCost());
+            if (cost != null) {
+                totalPrice += cost;
+                validOffersCount++;
+            }
+        }
+
+        return validOffersCount == 0 ? 0 : totalPrice / validOffersCount;
+    }
+
+
+    //حقت واحد حسبه متوسسط السعر لكل العروض Duja
+    public Property getPropertyById(Integer propertyId) {
+        Optional<Property> property = propertyRepository.findById(propertyId);
+        return property.orElse(null);
+    }
+
 
 }

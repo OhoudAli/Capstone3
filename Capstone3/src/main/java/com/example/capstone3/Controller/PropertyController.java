@@ -2,6 +2,7 @@ package com.example.capstone3.Controller;
 
 
 import com.example.capstone3.Api.ApiResponse;
+import com.example.capstone3.Model.Owner;
 import com.example.capstone3.Model.Property;
 import com.example.capstone3.Service.PropertyService;
 import jakarta.validation.Valid;
@@ -61,5 +62,51 @@ public class PropertyController {
     public List<Property> getByStatus(@PathVariable Integer ownerId,@PathVariable String status){
         return propertyService.getPropertyByStatus(ownerId, status);
     }
+
+    //----------------------------------------------------------------
+
+    //5
+    @GetMapping("/calculate-price/{propertyId}")
+    public ResponseEntity<Double> calculatePrice(@PathVariable Integer propertyId) {
+        // استدعاء دالة الخدمة لحساب السعر
+        double price = propertyService.calculatePropertyPrice(propertyId);
+
+
+        return ResponseEntity.status(200).body(price);
+    }
+
+    //4 Duja مجموع ربحه السنوي
+    @GetMapping("/owner/{ownerId}/total-annual-profit")
+    public String getTotalAnnualProfit(@PathVariable Integer ownerId) {
+        Owner owner = new Owner();
+        owner.setId(ownerId);
+
+        return propertyService.calculateTotalAnnualProfitFromAllProperties(owner);
+    }
+
+    //3 Duja تعرض العقارات الي بتنتهي خلال فتره (هو يدخل الرقم)
+    @GetMapping("/ending/{proposedYears}")
+    public ResponseEntity<?> endingSoon(@PathVariable int proposedYears) {
+        List<Property> properties = propertyService.endingSoon(proposedYears);
+        if (properties.isEmpty()) {
+            return ResponseEntity.status(400).body("There is nothing ending by this period");
+        }
+        return ResponseEntity.ok(properties);
+    }
+
+
+    //عشان يوقف استقبال العروض2 Duja
+    @PutMapping("/property/{propertyId}/stop-receiving-offers")
+    public ResponseEntity stopReceivingOffers(@PathVariable Integer propertyId) {
+    return ResponseEntity.status(200).body(new ApiResponse("stop receiving offers "));
+    }
+    //1 duja تحسب متوسط السعر لكل العروض
+    @GetMapping("/property/{propertyId}/average-offer-price")
+    public ResponseEntity<Double> getAverageOfferPrice(@PathVariable Integer propertyId) {
+        double averagePrice = propertyService.calculateAverageOfferPrice(propertyId);
+        return ResponseEntity.ok(averagePrice);
+    }
+
+
 
 }

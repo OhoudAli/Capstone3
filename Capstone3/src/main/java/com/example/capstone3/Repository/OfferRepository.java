@@ -41,4 +41,14 @@ public interface OfferRepository extends JpaRepository<Offer,Integer> {
 
     // Method to count offers by owner
     Integer countByOwner(Owner owner);
+
+    List<Offer> findByProperty_Id(Integer propertyId);
+
+    int countByInvestorIdAndOfferStatus(Integer investorId, String offerStatus);  // تعديل هذا السطر
+
+    int countByOwnerIdAndOfferStatus(int ownerId, String accepted);
+
+    Offer findTopByInvestorIdOrderByLastOfferTimeDesc(Integer investorId);
+
+    Offer countByOwnerId(Integer id);
 }

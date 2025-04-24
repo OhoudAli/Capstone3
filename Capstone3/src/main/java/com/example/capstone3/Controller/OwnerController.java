@@ -4,6 +4,7 @@ package com.example.capstone3.Controller;
 import com.example.capstone3.Api.ApiResponse;
 import com.example.capstone3.DTO.OwnerOfferCountDTO;
 import com.example.capstone3.Model.Owner;
+import com.example.capstone3.Service.ContractService;
 import com.example.capstone3.Service.OfferService;
 import com.example.capstone3.Service.OwnerService;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ public class OwnerController {
 
     private final OwnerService ownerService;
     private final OfferService offerService;
+    private final ContractService contractService;
 
     @GetMapping("/getAll")
     public List<Owner> getAll() {
@@ -62,6 +64,12 @@ public class OwnerController {
         return ResponseEntity.status(200).body(new ApiResponse("Offer rejected"));
     }
 
+//    @PostMapping("/create-contract/{offerId}")
+//    public ResponseEntity createContract(@PathVariable Integer offerId){
+//       contractService.createContractFromOffer(offerId);
+//       return ResponseEntity.status(200).body(new ApiResponse("Contract created successfully"));
+//    }
+
 
 
     //Taha
@@ -72,5 +80,12 @@ public class OwnerController {
 
 
     }
+
+//    //6  تحسب معدل قبول المالك Duja
+//    @GetMapping("/{ownerId}/offer-acceptance-rate")
+//    public ResponseEntity getOfferAcceptanceRate(@PathVariable Integer ownerId) {
+//        double rate = ownerService.calculateOfferAcceptanceRate(ownerId);
+//        return ResponseEntity.status(200).body("Owner's bid acceptance rate: "+rate);
+//    }
 
 }

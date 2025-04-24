@@ -38,6 +38,8 @@ public class OfferController {
         return ResponseEntity.status(200).body(new ApiResponse("Offer deleted successfully"));
     }
 
+
+
     //--------------------------------------------------
     //Taha
     // Get the offer with the highest cost
@@ -72,5 +74,13 @@ public class OfferController {
     }
 
 
+    //7 Duja مانخلي التاجر يسوي سبميت لاكثر من اوفر بنفس الدقيقه
+    @PostMapping("/submit")
+    public ResponseEntity submitOffer(@RequestParam Integer propertyId, @RequestParam Integer investorId, @RequestParam Integer price) {
+
+        Offer newOffer = offerService.submitOffer(propertyId, investorId, price);
+        return ResponseEntity.status(200).body(newOffer);
+
+    }
 
 }

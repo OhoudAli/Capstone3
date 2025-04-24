@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Setter
@@ -41,8 +42,11 @@ public class Offer {
     @Column
     private LocalDate orderDate;
 
-    @OneToOne
+    @OneToOne(mappedBy = "offer")
+    @JsonIgnore
     private Contract contract;
+
+    private LocalDateTime lastOfferTime;
 
     @ManyToOne
     @JoinColumn(name = "offer_id",referencedColumnName = "id")

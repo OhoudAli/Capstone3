@@ -54,6 +54,15 @@ public class Property {
     @Column
     private String status;
 
+    private Double propertyValue;
+
+    //اضافات عشان الايند بوينت
+    @Column
+    private Double annualRent =0.0 ;
+
+    private boolean acceptingOffers;  // هذه بتكون مشكلة إذا كانت القيمة null
+    private LocalDate leaseEndDate;
+
     @Column
     @NotEmpty
     @Pattern(regexp = "^S\\d{10}$")

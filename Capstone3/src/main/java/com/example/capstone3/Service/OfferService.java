@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -79,7 +80,7 @@ public class OfferService {
 
     //Ohood 2: if owner accept the offer the other offers from other investor well be rejected
     //
-    //Taha.2: Contract dirctly created
+    //Taha.2: Contract directly created
     public void acceptOffer(Integer ownerId,Integer offerId){
         Owner owner = ownerRepository.findOwnerById(ownerId);
         Offer offer = offerRepository.findOfferById(offerId);
@@ -102,7 +103,7 @@ public class OfferService {
         contract.setOwner(owner);
         contract.setInvestor(offer.getInvestor());
 
-
+        contract.setId(offerId);
         contractRepository.save(contract);
         offerRepository.save(offer);
 
@@ -120,6 +121,10 @@ public class OfferService {
             offerRepository.save(o);
         }
     }
+
+
+
+
 
     //Ohoud 3: if the offer is not suitable for the owner ,owner can rejected
     public void rejectOffer(Integer ownerId,Integer offerId){
@@ -199,4 +204,49 @@ public class OfferService {
 
         return countMap;
     }
+
+    //6 بيحسب  متوسط العروض الي جته Duja
+    public double calculateAverageOfferPrice(Integer propertyId) {
+        List<Offer> offers = offerRepository.findByProperty_Id(propertyId); // تأكد من استخدام الطريقة الصحيحة
+
+        if (offers.isEmpty()) {
+            return 0;
+        }
+
+        double totalPrice = 0;
+        for (Offer offer : offers) {
+            totalPrice += offer.getCost(); // تأكد من أن الـ getCost() يعيد السعر بشكل صحيح
+        }
+        return totalPrice / offers.size();
+    }
+
+    //Duja
+    public Offer submitOffer(Integer propertyId, Integer investorId, Integer price) {
+        Investor investor = investorRepository.findById(investorId)
+                .orElseThrow(() -> new ApiException("Investor not found"));
+
+        Property property = propertyRepository.findById(propertyId)
+                .orElseThrow(() -> new ApiException("Property not found"));
+
+        if (!property.isAcceptingOffers()) {
+            throw new ApiException("This property is not accepting offers at the moment.");
+        }
+
+        Offer lastOffer = offerRepository.findTopByInvestorIdOrderByLastOfferTimeDesc(investorId);
+        if (lastOffer != null) {
+            long minutesDiff = ChronoUnit.MINUTES.between(lastOffer.getLastOfferTime(), LocalDateTime.now());
+            if (minutesDiff < 1) {
+                throw new ApiException("You cannot submit more than one offer per minute.");
+            }
+        }
+
+        Offer newOffer = new Offer();
+//        newOffer.setCost(price);
+        newOffer.setProperty(property);
+        newOffer.setInvestor(investor);
+        newOffer.setLastOfferTime(LocalDateTime.now());
+
+        return offerRepository.save(newOffer);
+    }
+
 }
